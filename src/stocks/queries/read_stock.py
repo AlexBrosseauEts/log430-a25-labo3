@@ -21,20 +21,31 @@ def get_stock_by_id(product_id):
         return {}
 
 def get_stock_for_all_products():
-    """Get stock quantity for all products"""
+    """Get stock quantity for all products, joined with Product info, as a list of dicts"""
     session = get_sqlalchemy_session()
-    # TODO: ajoutez un join avec Product
-    stock_data = (
+    try:
+        rows = (
             session.query(
-                Stock.id,
-                Stock.product_id,
-                Stock.quantity,
-                Product.name,
-                Product.sku,
-                Product.price
+                Stock.product_id.label("product_id"),
+                Stock.quantity.label("quantity"),
+                Product.name.label("name"),
+                Product.sku.label("sku"),
+                Product.price.label("price"),
             )
-            .join(Product, Stock.product_id == Product.id)
+            .join(Product, Product.id == Stock.product_id)
             .all()
         )
-    
-    return stock_data
+
+        # SQLALCH to json type
+        return [
+            {
+                "product_id": int(r.product_id),
+                "quantity": int(r.quantity),
+                "name": r.name,
+                "sku": r.sku,
+                "price": float(r.price),
+            }
+            for r in rows
+        ]
+    finally:
+        return {}
