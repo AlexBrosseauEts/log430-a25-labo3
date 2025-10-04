@@ -11,11 +11,10 @@ from stocks.models.stock import Stock
 def get_stock_by_id(product_id):
     """Get stock by product ID """
     session = get_sqlalchemy_session()
-    product_id=int(product_id)
     result = session.query(Stock).filter_by(product_id=product_id).all()
     if len(result):
         return {
-            'id': result[0].product_id,
+            'product_id': result[0].product_id,
             'quantity': result[0].quantity,
         }
     else:
@@ -24,20 +23,17 @@ def get_stock_by_id(product_id):
 def get_stock_for_all_products():
     """Get stock quantity for all products"""
     session = get_sqlalchemy_session()
+    # TODO: ajoutez un join avec Product
     results = session.query(
         Stock.product_id,
         Stock.quantity,
-        Product.name,
-        Product.sku,
-        Product.price
-    ).join(Product, Product.id == Stock.product_id).all()
+    ).all()
     stock_data = []
     for row in results:
         stock_data.append({
-            'Article': int(row.product_id),
-            'Name': row.name,
-            'Numéro SKU': row.sku,
-            'Prix unitaire': float(row.price),
+            'Article': row.product_id,
+            'Numéro SKU': '',
+            'Prix unitaire': 0,
             'Unités en stock': int(row.quantity),
         })
     
