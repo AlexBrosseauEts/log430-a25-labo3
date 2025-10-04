@@ -13,12 +13,13 @@ class Query(ObjectType):
         if d:
             return Product(
                 id=int(id),
-                name=d.get(b"name").decode(),
-                sku=d.get(b"sku").decode(),
-                price=float(d.get(b"price").decode()),
-                quantity=int(d.get(b"quantity").decode()),
+                name=d.get(b"name").decode() if d.get(b"name") else f"Product {id}",
+                sku=d.get(b"sku").decode() if d.get(b"sku") else "",
+                price=float(d.get(b"price").decode()) if d.get(b"price") else 0.0,
+                quantity=int(d.get(b"quantity").decode()) if d.get(b"quantity") else 0,
             )
         return None
+
     
     def resolve_stock_level(self, info, product_id):
         """ Retrieve stock quantity from Redis """
