@@ -13,10 +13,10 @@ class Query(ObjectType):
         if d:
             return Product(
                 id=int(id),
-                name=d.get(b"name").decode() if b"name" in d else f"Product {id}",
-                sku=d.get(b"sku").decode() if b"sku" in d else "",
-                price=float(d.get(b"price").decode()) if b"price" in d else 0.0,
-                quantity=int(d.get(b"quantity").decode()) if b"quantity" in d else 0,
+                name=d.get(b"name").decode(),
+                sku=d.get(b"sku").decode(),
+                price=float(d.get(b"price").decode()),
+                quantity=int(d.get(b"quantity").decode()),
             )
         return None
     
