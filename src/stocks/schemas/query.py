@@ -16,9 +16,9 @@ class Query(ObjectType):
             return Product(
                 id=id,
                 name=f"Product {id}",
-                sku=data.get(b"sku").decode(),
-                price=float(data.get(b"price").decode()),
-                quantity=int(data.get(b"quantity").decode()),
+                sku=product_data['sku'],
+                price=float(product_data['price']),
+                quantity=int(product_data['quantity']),
             )
         return None
     
