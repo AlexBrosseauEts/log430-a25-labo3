@@ -7,8 +7,9 @@ class Query(ObjectType):
     product = graphene.Field(Product, id=String(required=True))
     stock_level = Int(product_id=String(required=True))
     
-    r = get_redis_conn()
-        d = r.hgetall(f"stock:{id}")
+    def resolve_product(self, info, id):
+        r = get_redis_conn()
+        d = r.hgetall(f"stock:{id}")   # PAS de .decode()
         if d:
             return Product(
                 id=int(id),
