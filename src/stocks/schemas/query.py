@@ -8,17 +8,15 @@ class Query(ObjectType):
     stock_level = Int(product_id=String(required=True))
     
     def resolve_product(self, info, id):
-        """ Create an instance of Product based on stock info for that product that is in Redis """
-        redis_client = get_redis_conn()
-        product_data = redis_client.hgetall(f"stock:{id}")
-        # TODO: ajoutez les colonnes name, sku, price
+        r = get_redis_conn()
+        product_data = r.hgetall(f"stock:{id}")
         if product_data:
             return Product(
-                id=id,
-                name=f"Product {id}",
-                sku=product_data['sku'],
-                price=float(product_data['price']),
-                quantity=int(product_data['quantity']),
+                id=int(id),
+                name=product_data.get(b"name").decode() if b"name" in product_data else f"Product {id}",
+                sku=product_data.get(b"sku").decode() if b"sku" in product_data else "",
+                price=float(product_data.get(b"price").decode()) if b"price" in product_data else 0,
+                quantity=int(product_data.get(b"quantity").decode()) if b"quantity" in product_data else 0,
             )
         return None
     
