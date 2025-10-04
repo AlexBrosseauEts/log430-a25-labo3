@@ -9,14 +9,14 @@ class Query(ObjectType):
     
     def resolve_product(self, info, id):
         r = get_redis_conn()
-        product_data = r.hgetall(f"stock:{id}")
-        if product_data:
+        d = r.hgetall(f"stock:{id}")
+        if d:
             return Product(
                 id=int(id),
-                name=product_data.get(b"name").decode() if b"name" in product_data else f"Product {id}",
-                sku=product_data.get(b"sku").decode() if b"sku" in product_data else "",
-                price=float(product_data.get(b"price").decode()) if b"price" in product_data else 0,
-                quantity=int(product_data.get(b"quantity").decode()) if b"quantity" in product_data else 0,
+                name=d.get(b"name").decode() if b"name" in d else f"Product {id}",
+                sku=d.get(b"sku").decode() if b"sku" in d else "",
+                price=float(d.get(b"price").decode()) if b"price" in d else 0.0,
+                quantity=int(d.get(b"quantity").decode()) if b"quantity" in d else 0,
             )
         return None
     
