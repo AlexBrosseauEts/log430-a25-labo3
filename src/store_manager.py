@@ -11,7 +11,7 @@ from orders.controllers.user_controller import create_user, remove_user, get_use
 from stocks.controllers.product_controller import create_product, remove_product, get_product
 from stocks.controllers.stock_controller import get_stock, set_stock, get_stock_overview
 from db import get_redis_conn
-from stocks.commands.stock_write import _populate_redis_from_mysql
+from stocks.commands.write_stock import _populate_redis_from_mysql
  
 app = Flask(__name__)
 
