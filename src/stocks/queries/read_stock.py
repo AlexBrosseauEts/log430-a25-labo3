@@ -15,7 +15,7 @@ def get_stock_by_id(product_id):
     result = session.query(Stock).filter_by(product_id=product_id).all()
     if len(result):
         return {
-            'product_id': result[0].product_id,
+            'id': result[0].product_id,
             'quantity': result[0].quantity,
         }
     else:
