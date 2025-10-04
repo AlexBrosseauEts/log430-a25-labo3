@@ -11,6 +11,7 @@ from stocks.models.stock import Stock
 def get_stock_by_id(product_id):
     """Get stock by product ID """
     session = get_sqlalchemy_session()
+    product_id=int(product_id)
     result = session.query(Stock).filter_by(product_id=product_id).all()
     if len(result):
         return {
