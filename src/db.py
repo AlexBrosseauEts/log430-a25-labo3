@@ -23,16 +23,11 @@ def get_mysql_conn():
 
 def get_redis_conn():
     """Get a Redis connection using env variables"""
-    return redis.Redis(
-        host=config.REDIS_HOST,
-        port=int(config.REDIS_PORT),
-        db=int(config.REDIS_DB),
-        decode_responses=True,
-    )
+    return redis.Redis(host=config.REDIS_HOST, port=config.REDIS_PORT, db=config.REDIS_DB, decode_responses=True)
+
 
 def get_sqlalchemy_session():
     """Get an SQLAlchemy ORM session using env variables"""
-    # Do NOT force mysql_native_password or any auth_plugin
     url = (
         f"mysql+mysqlconnector://{config.DB_USER}:{config.DB_PASS}"
         f"@{config.DB_HOST}:{config.DB_PORT}/{config.DB_NAME}?charset=utf8mb4"
