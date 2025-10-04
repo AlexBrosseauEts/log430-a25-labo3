@@ -7,15 +7,14 @@ class Query(ObjectType):
     product = graphene.Field(Product, id=String(required=True))
     stock_level = Int(product_id=String(required=True))
     
-    def resolve_product(self, info, id):
-        r = get_redis_conn()
+    r = get_redis_conn()
         d = r.hgetall(f"stock:{id}")
         if d:
             return Product(
                 id=int(id),
                 name=d.get("name") or f"Product {id}",
                 sku=d.get("sku") or "",
-                price=float(d.get("price")) if d.get("price") not in (None, "") else 0.0,
+                price=float(d.get("price")) if d.get("price") else 0.0,
                 quantity=int(d.get("quantity") or 0),
             )
         return None
