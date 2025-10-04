@@ -10,6 +10,8 @@ from orders.controllers.order_controller import create_order, remove_order, get_
 from orders.controllers.user_controller import create_user, remove_user, get_user
 from stocks.controllers.product_controller import create_product, remove_product, get_product
 from stocks.controllers.stock_controller import get_stock, set_stock, get_stock_overview
+from db import get_redis_conn
+from stocks.repositories.stock_write import _populate_redis_from_mysql
  
 app = Flask(__name__)
 
@@ -106,4 +108,6 @@ def graphql_supplier():
 
 # Start Flask app
 if __name__ == '__main__':
+    r = get_redis_conn()
+    _populate_redis_from_mysql(r)
     app.run(host='0.0.0.0', port=5000)
